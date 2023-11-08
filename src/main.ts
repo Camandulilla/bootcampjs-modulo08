@@ -1,56 +1,169 @@
-import "./style.css";
+type Especialidad = "Medico de familia" | "Pediatra" | "Cardiólogo";
 
-const popRock = "🎵 Pop rock";
-const rock = "🎸 Rock";
-const hardRock = "🤘 HardRock";
-const clasica = "🎼 Clasica";
-
-const estilo = "background-color: green; font-size: 30px; font-weight: bold;";
-
-interface grupoMusical {
-  nombreGrupo: string;
-  fundacion: number;
-  enActivo: boolean;
-  genero: string;
+interface Paciente {
+  id: number;
+  nombre: string;
+  apellidos: string;
+  sexo: string;
+  temperatura: number;
+  frecuenciaCardiaca: number;
+  especialidad: Especialidad;
+  edad: number;
 }
 
-const grupo1: grupoMusical = {
-  nombreGrupo: "The Beatles",
-  fundacion: 1960,
-  enActivo: true,
-  genero: popRock,
-};
-const grupo2: grupoMusical = {
-  nombreGrupo: "Queen",
-  fundacion: 1970,
-  enActivo: false,
-  genero: rock,
-};
-const grupo3: grupoMusical = {
-  nombreGrupo: "AC DC",
-  fundacion: 1973,
-  enActivo: true,
-  genero: hardRock,
-};
-const grupo4: grupoMusical = {
-  nombreGrupo: "Ludwig van Beethoven",
-  fundacion: 1770,
-  enActivo: false,
-  genero: clasica,
-};
-const grupo5: grupoMusical = {
-  nombreGrupo: "The Rolling Stones",
-  fundacion: 1962,
-  enActivo: true,
-  genero: rock,
+const pacientes: Paciente[] = [
+  {
+    id: 1,
+    nombre: "John",
+    apellidos: "Doe",
+    sexo: "Male",
+    temperatura: 36.8,
+    frecuenciaCardiaca: 80,
+    especialidad: "Medico de familia",
+    edad: 44,
+  },
+  {
+    id: 2,
+    nombre: "Jane",
+    apellidos: "Doe",
+    sexo: "Female",
+    temperatura: 36.8,
+    frecuenciaCardiaca: 70,
+    especialidad: "Medico de familia",
+    edad: 43,
+  },
+  {
+    id: 3,
+    nombre: "Junior",
+    apellidos: "Doe",
+    sexo: "Male",
+    temperatura: 36.8,
+    frecuenciaCardiaca: 90,
+    especialidad: "Pediatra",
+    edad: 8,
+  },
+  {
+    id: 4,
+    nombre: "Mary",
+    apellidos: "Wien",
+    sexo: "Female",
+    temperatura: 36.8,
+    frecuenciaCardiaca: 120,
+    especialidad: "Medico de familia",
+    edad: 20,
+  },
+  {
+    id: 5,
+    nombre: "Scarlett",
+    apellidos: "Somez",
+    sexo: "Female",
+    temperatura: 36.8,
+    frecuenciaCardiaca: 110,
+    especialidad: "Cardiólogo",
+    edad: 30,
+  },
+  {
+    id: 6,
+    nombre: "Brian",
+    apellidos: "Kid",
+    sexo: "Male",
+    temperatura: 39.8,
+    frecuenciaCardiaca: 180,
+    especialidad: "Pediatra",
+    edad: 11,
+  },
+];
+
+let nombrePacientes: string = "";
+
+//Queremos extraer la lista de paciente que están asignados a la especialidad de Pediatría
+const obtenPacientesAsignadosAPediatria = (lista: Paciente[]): Paciente[] => {
+  let listaPacientes: Paciente[] = [];
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].especialidad === "Pediatra") {
+      listaPacientes.push(pacientes[i]);
+      nombrePacientes += lista[i].nombre + "|";
+    }
+  }
+
+  return listaPacientes;
 };
 
-function print(g: grupoMusical) {
-  return g.fundacion + " / Activo: " + g.enActivo + " / " + g.genero;
-}
+console.log(obtenPacientesAsignadosAPediatria(pacientes), nombrePacientes);
 
-console.log("%c" + grupo1.nombreGrupo, estilo, print(grupo1));
-console.log("%c" + grupo2.nombreGrupo, estilo, print(grupo2));
-console.log("%c" + grupo3.nombreGrupo, estilo, print(grupo3));
-console.log("%c" + grupo4.nombreGrupo, estilo, print(grupo4));
-console.log("%c" + grupo5.nombreGrupo, estilo, print(grupo5));
+//Queremos extraer la lista de pacientes asignados a Pediatría y que tengan una edad menor de 10 años.
+const obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios = (
+  lista: Paciente[]
+): Paciente[] => {
+  let listaPacientes: Paciente[] = [];
+  nombrePacientes = "";
+
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].especialidad === "Pediatra" && lista[i].edad < 10) {
+      listaPacientes.push(pacientes[i]);
+      nombrePacientes += lista[i].nombre + "|";
+    }
+  }
+
+  return listaPacientes;
+};
+
+console.log(
+  obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios(pacientes),
+  nombrePacientes
+);
+
+//Queremos activar el protocolo de urgencia si cualquier de los pacientes tiene un ritmo cardíaco superior a 100 pulsaciones por minuto y una temperatura corporal superior a 39 grados.
+const activarProtocoloUrgencia = (lista: Paciente[]): boolean => {
+  let activarProctolo = false;
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].frecuenciaCardiaca > 100 && lista[i].temperatura > 39) {
+      activarProctolo = true;
+      console.log("🚨🚨🚨 ACTIVAMOS EL PROTOCOLO DE URGENCIA!!!! 🚨🚨🚨");
+      break;
+    }
+  }
+  return activarProctolo;
+};
+
+//SE HA MODIFICADO LA FRECUENTACIA CARDÍACA DEL ULTIMO PACIENTE PARA QUE CUMPLIERA AL MENOS 1 LA CONDICIÓN Y SALTE LA FUNCIÓN.
+activarProtocoloUrgencia(pacientes);
+
+//El pediatra no puede atender hoy a los pacientes, queremos reasignar los pacientes asignados a la especialidad de pediatría a la de medico de familia.
+const reasignaPacientesAMedicoFamilia = (lista: Paciente[]): Paciente[] => {
+  let i = 0;
+  nombrePacientes = "";
+
+  while (i < lista.length) {
+    if (lista[i].especialidad === "Pediatra") {
+      lista[i].especialidad = "Medico de familia";
+      nombrePacientes += lista[i].nombre + "|";
+    }
+    i++;
+  }
+  return lista;
+};
+
+reasignaPacientesAMedicoFamilia(pacientes);
+console.log(
+  `Pacientes reasignados a Mediaco de familia: 
+    ${nombrePacientes} `
+);
+
+//Queremos saber si podemos mandar al Pediatra a casa (si no tiene pacientes asignados), comprobar si en la lista hay algún paciente asignado a pediatría
+const HayPacientesDePediatria = (lista: Paciente[]): boolean => {
+  let i = 0;
+  let hayPacientes = false;
+
+  while (i < lista.length) {
+    if (lista[i].especialidad === "Pediatra") {
+      hayPacientes = true;
+    }
+    i++;
+  }
+  return hayPacientes;
+};
+
+console.log(
+  `¿¿Hay pacientes para Pediatría?? ${HayPacientesDePediatria(pacientes)}`
+);
